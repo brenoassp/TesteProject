@@ -12,11 +12,11 @@
     <div class="side-bar bg-side-bar">
         <ul class="nav flex-column">
             <li class="nav-item mt-20 sidebar-item
-                @(ViewContext.RouteData.Values["Action"].ToString() == "Index" ? "sidebar-selected-item" : "")">
+                @(ViewContext.RouteData.Values["Action"].ToString() == "List" ? "sidebar-selected-item" : "")">
                 @Html.ActionLink(
                     "INICIO",
-                    "Index",
-                    "Home",
+                    "List",
+                    "Pessoa",
                     null,
                     new
                     {
@@ -32,7 +32,7 @@
                 @Html.ActionLink(
                     "EM ANDAMENTO",                                                  // linkText
                     "Situacao",                                    // actionName
-                    "Home",                                                   // controllerName
+                    "Pessoa",                                                   // controllerName
                     new {                                                     // routeValues
                         situacao = "emAndamento"
                     },
@@ -49,7 +49,7 @@
                 @Html.ActionLink(
                     "ATRASADAS",
                     "Situacao",
-                    "Home",
+                    "Pessoa",
                     new {
                         situacao = "atrasadas"
                     },

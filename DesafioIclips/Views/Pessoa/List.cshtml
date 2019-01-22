@@ -1,0 +1,82 @@
+﻿@model DesafioIclips.Models.PessoasListViewModel
+
+<div class="title">
+    @ViewBag.Title
+    <span>
+        <button type="button" class="btn btn-cadastro f-right mt-1">Cadastrar lorem</button>
+    </span>
+</div>
+
+<table id="table_lorem" class="" border="0">
+    <tbody>
+
+        @{int i = 0;}
+        @foreach (var item in Model.Pessoas)
+        {
+            <tr class="@(i % 2 == 0 ? "even" : "odd")">
+                @Html.Partial("_Pessoa", item)
+            </tr>
+            i += 1;
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+    <script>
+    $("tr").click(function () {
+        $(this).addClass("selected").siblings().removeClass("selected");
+    });
+
+    var update_table = function (pessoas) {
+        let odd_even = false;
+        let rows = "";
+        $.each(pessoas, function () {
+
+            name_column = "<td width=\"40%\">" + this.Nome + "</td>"
+
+            email_column = "<td width=\"40%\">" + this.Email + "</td>"
+
+            if (this.Situacao == "em andamento") {
+                tag_column = "<td class=\"columnTag\"><div class=\"f-right mr-20 text-center allign-middle\"><span class=\"tag bg-info\">" + this.Situacao + "</span></div></td>"
+            }
+            else if (this.Situacao == "atrasado")
+            {
+                tag_column = "<td class=\"columnTag\"><div class=\"f-right mr-20 text-center allign-middle\"><span class=\"tag bg-danger\">" + this.Situacao + "</span></div></td>"
+            }
+
+            row = name_column + email_column + tag_column
+
+            rows += "<tr class=\"" + (odd_even ? "odd" : "even") + "\">" + row + "</tr>";
+            odd_even = !odd_even;
+        })
+        return rows;
+    }
+
+    pessoasArray =  @Html.Raw(Json.Encode(Model.Pessoas));
+
+    var pessoasJSON = JSON.stringify(pessoasArray)
+
+    var ordenar = function () {
+        $.ajax({
+            type: "POST",
+            url: '/Pessoa/Ajax_OrdenaPessoas',
+            data: {
+                pessoasJSON: pessoasJSON
+            },
+            success: function (data) {
+                var result = JSON.parse(data);
+                $("#table_lorem tbody").html(update_table(result));
+            },
+            error: function () {
+                alert("Erro com o servidor!");
+            }
+        });
+    }
+
+    $(".btn-cadastro").click(function () {
+        console.log(pessoasJSON);
+        ordenar();
+    });
+    </script>
+}

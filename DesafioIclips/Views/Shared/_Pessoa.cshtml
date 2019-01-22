@@ -1,0 +1,16 @@
+﻿@model DesafioIclips.Models.Pessoa
+
+<td width="40%">@Model.Nome</td>
+<td width="40%">@Model.Email</td>
+<td class="columnTag">
+    <div class="f-right mr-20 text-center allign-middle">
+        @if (Model.Situacao == "em andamento")
+        {
+            <span class="tag bg-info">@Model.Situacao</span>
+        }
+        else if (Model.Situacao == "atrasado")
+        {
+            <span class="tag bg-danger">@Model.Situacao</span>
+        }
+    </div>
+</td>

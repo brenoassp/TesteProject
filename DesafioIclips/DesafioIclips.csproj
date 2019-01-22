@@ -214,6 +214,7 @@
     <Content Include="Views\Pessoa\Index.cshtml" />
     <Content Include="Views\Pessoa\List.cshtml" />
     <Content Include="Views\Shared\_Pessoa.cshtml" />
+    <Content Include="Views\Shared\_Pessoas.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

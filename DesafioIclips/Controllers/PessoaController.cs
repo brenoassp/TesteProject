@@ -77,12 +77,15 @@ namespace DesafioIclips.Controllers
         }
 
         [HttpPost]
-        public string Ajax_OrdenaPessoas(string pessoasJSON)
+        public PartialViewResult Ajax_OrdenaPessoas(string pessoasJSON)
         {
             List<Pessoa> list = JsonConvert.DeserializeObject<List<Pessoa>>(pessoasJSON);
             list = list.OrderBy(x => x.Nome).ToList();
-            var serializer = new JavaScriptSerializer();
-            return serializer.Serialize(list);
+            var model = new PessoasListViewModel
+            {
+                Pessoas = list
+            };
+            return PartialView("_Pessoas", model);
         }
     }
 }

@@ -1,0 +1,15 @@
+﻿@model DesafioIclips.Models.PessoasListViewModel
+
+<table id="table_lorem" class="" border="0">
+    <tbody>
+
+        @{int i = 0;}
+        @foreach (var item in Model.Pessoas)
+        {
+            <tr class="@(i % 2 == 0 ? "even" : "odd")">
+                @Html.Partial("_Pessoa", item)
+            </tr>
+            i += 1;
+        }
+    </tbody>
+</table>

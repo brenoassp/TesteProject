@@ -1,31 +1,96 @@
 ﻿@{
-    ViewBag.Title = "Home Page";
+    var pessoas = ViewBag.Pessoas;
 }
 
-<div class="jumbotron">
-    <h1>ASP.NET</h1>
-    <p class="lead">ASP.NET is a free web framework for building great Web sites and Web applications using HTML, CSS and JavaScript.</p>
-    <p><a href="https://asp.net" class="btn btn-primary btn-lg">Learn more &raquo;</a></p>
+<div class="title">
+    @ViewBag.Title
+    <span>
+        <button type="button" class="btn btn-cadastro f-right mt-1">Cadastrar lorem</button>
+    </span>
 </div>
 
-<div class="row">
-    <div class="col-md-4">
-        <h2>Getting started</h2>
-        <p>
-            ASP.NET MVC gives you a powerful, patterns-based way to build dynamic websites that
-            enables a clean separation of concerns and gives you full control over markup
-            for enjoyable, agile development.
-        </p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301865">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Get more libraries</h2>
-        <p>NuGet is a free Visual Studio extension that makes it easy to add, remove, and update libraries and tools in Visual Studio projects.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301866">Learn more &raquo;</a></p>
-    </div>
-    <div class="col-md-4">
-        <h2>Web Hosting</h2>
-        <p>You can easily find a web hosting company that offers the right mix of features and price for your applications.</p>
-        <p><a class="btn btn-default" href="https://go.microsoft.com/fwlink/?LinkId=301867">Learn more &raquo;</a></p>
-    </div>
-</div>
+<table id="table_lorem" class="" border="0">
+    <tbody>
+        @{int i = 0;}
+        @foreach (var item in pessoas)
+        {
+            <tr class="@(i % 2 == 0 ? "even" : "odd")">
+                <td width="40%">@item.Nome</td>
+                <td width="40%">@item.Email</td>
+                <td class="columnTag">
+                    <div class="f-right mr-20 text-center allign-middle">
+                        @if (item.Situacao == "em andamento")
+                        {
+                            <span class="tag bg-info">@item.Situacao</span>
+                        }
+                        else if (item.Situacao == "atrasado")
+                        {
+                            <span class="tag bg-danger">@item.Situacao</span>
+                        }
+                    </div>
+                </td>
+            </tr>
+            i += 1;
+        }
+    </tbody>
+</table>
+
+@section scripts
+{
+<script>
+    $("tr").click(function () {
+        $(this).addClass("selected").siblings().removeClass("selected");
+    });
+
+    var update_table = function (pessoas) {
+        let odd_even = false;
+        let rows = "";
+        $.each(pessoas, function () {
+
+            name_column = "<td width=\"40%\">" + this.Nome + "</td>"
+
+            email_column = "<td width=\"40%\">" + this.Email + "</td>"
+
+            if (this.Situacao == "em andamento") {
+                tag_column = "<td class=\"columnTag\"><div class=\"f-right mr-20 text-center allign-middle\"><span class=\"tag bg-info\">" + this.Situacao + "</span></div></td>"
+            }
+            else if (this.Situacao == "atrasado")
+            {
+                tag_column = "<td class=\"columnTag\"><div class=\"f-right mr-20 text-center allign-middle\"><span class=\"tag bg-danger\">" + this.Situacao + "</span></div></td>"
+            }
+            
+            row = name_column + email_column + tag_column
+
+            rows += "<tr class=\"" + (odd_even ? "odd" : "even") + "\">" + row + "</tr>";
+            odd_even = !odd_even;
+        })
+        return rows;
+    }
+
+    pessoasArray =  @Html.Raw(Json.Encode(ViewBag.Pessoas));
+
+    var pessoasJSON = JSON.stringify(pessoasArray)
+
+    var ordenar = function () {
+        $.ajax({
+            type: "POST",
+            url: '/Home/Ajax_OrdenaPessoas',
+            data: {
+                pessoasJSON: pessoasJSON
+            },
+            success: function (data) {
+                var result = JSON.parse(data);
+                $("#table_lorem tbody").html(update_table(result));
+            },
+            error: function () {
+                alert("Erro com o servidor!");
+            }
+        });
+    }
+
+    $(".btn-cadastro").click(function () {
+        console.log(pessoasJSON);
+        ordenar();
+    });
+</script>
+}

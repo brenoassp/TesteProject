@@ -1,0 +1,29 @@
+﻿@{
+    ViewBag.Title = "Pessoas";
+    var pessoas = (List<DesafioIclips.Models.Pessoa>)ViewBag.Pessoas;
+}
+
+<div class="title">
+    Em andamento
+    <span>
+        <button type="button" class="btn btn-cadastro f-right mt-1">Cadastrar lorem</button>
+    </span>
+</div>
+
+<table id="table_lorem" class="" border="0">
+    <tbody>
+        @foreach (var item in pessoas)
+        {
+        <tr>
+            <td width="40%">@item.Nome</td>
+            <td width="40%">@item.Email</td>
+            <td class="columnTag">
+                <div class="f-right mr-20 text-center allign-middle">
+                    <span class="tag">@item.Situacao</span>
+                </div>
+            </td>
+        </tr>
+        }
+    </tbody>
+</table>
+
